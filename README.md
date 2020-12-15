@@ -1,1 +1,2 @@
-# Image biLinear interpolation implementation on dsp C600
+# Image biLinear interpolation implementation on C6000
+## Author: Ouwzhong, TOM-tym.
