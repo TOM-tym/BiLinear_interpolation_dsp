@@ -1,0 +1,8 @@
+ .global _csum
+_csum: .cproc a, b
+	.reg sum
+
+	SUBC a, b, sum
+
+	.return sum
+	.endproc

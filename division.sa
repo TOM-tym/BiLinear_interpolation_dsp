@@ -1,0 +1,40 @@
+; !division only for positive integer
+		.global _division
+_division: 	.cproc dividend, divisor
+		.reg result,index,cnt
+
+		ZERO result
+		MVK 1,index
+		CMPEQ divisor, 0, cnt
+[cnt] B label2 ;if divisor = 0, go to label2
+		CMPGT divisor, dividend, cnt
+[cnt] B label3 ;if divisor > divident, go to label3
+loop1:
+		SHL index,1,index
+		SHL divisor,1,divisor
+		CMPLT divisor, dividend, cnt
+[cnt] B loop1 ; if divisor<dividend goto loop1
+		CMPEQ divisor, dividend, cnt
+[cnt] B label1 ; if divisor=dividend goto label1
+
+loop2:
+		SHR index,1,index
+		SHR divisor,1,divisor
+		SUB dividend, divisor, dividend
+		CMPLT dividend, 0, cnt
+[cnt]	ADD dividend, divisor, dividend ;if divident < 0
+[!cnt]	ADD index, result, result ;if divident still > 0
+		CMPEQ index, 0, cnt
+[cnt]	B label3 ;if index = 0, go to label3
+[!cnt]	B loop2  ;if index != 0, back to loop2
+
+
+label1:
+		ADD index, result, result
+		B label3 ;jump to label3
+label2:
+		MVK -1, result
+		SHRU result, 1, result ; dividsor = 0, result should be the largest integer
+label3:   ;��ʱdividend����������result������
+		.return result
+		.endproc
