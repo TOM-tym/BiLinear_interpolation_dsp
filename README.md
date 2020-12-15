@@ -1,1 +1,1 @@
-# BiLinear_interpolation_dsp
+# Image biLinear interpolation implementation on dsp C600
