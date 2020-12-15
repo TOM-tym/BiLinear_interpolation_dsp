@@ -1,2 +1,3 @@
 # Image biLinear interpolation implementation on C6000
-## Author: Ouwzhong, TOM-tym.
+## Main Author: TOM-tym.
+## Affiliated author: Ouwzhong.
