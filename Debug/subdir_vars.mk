@@ -9,7 +9,8 @@ CMD_SRCS += \
 SA_SRCS += \
 ../assmbly.sa \
 ../division.sa \
-../imresize.sa 
+../imresize.sa \
+../interpolation.sa 
 
 C_SRCS += \
 ../main.c 
@@ -18,6 +19,7 @@ OBJS += \
 ./assmbly.obj \
 ./division.obj \
 ./imresize.obj \
+./interpolation.obj \
 ./main.obj 
 
 C_DEPS += \
@@ -26,7 +28,8 @@ C_DEPS += \
 SA_DEPS += \
 ./assmbly.pp \
 ./division.pp \
-./imresize.pp 
+./imresize.pp \
+./interpolation.pp 
 
 C_DEPS__QUOTED += \
 "main.pp" 
@@ -35,17 +38,20 @@ OBJS__QUOTED += \
 "assmbly.obj" \
 "division.obj" \
 "imresize.obj" \
+"interpolation.obj" \
 "main.obj" 
 
 SA_DEPS__QUOTED += \
 "assmbly.pp" \
 "division.pp" \
-"imresize.pp" 
+"imresize.pp" \
+"interpolation.pp" 
 
 SA_SRCS__QUOTED += \
 "../assmbly.sa" \
 "../division.sa" \
-"../imresize.sa" 
+"../imresize.sa" \
+"../interpolation.sa" 
 
 C_SRCS__QUOTED += \
 "../main.c" 
