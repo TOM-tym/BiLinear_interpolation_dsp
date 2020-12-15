@@ -8,8 +8,8 @@ CG_TOOL_ROOT := F:/software/ccs/ccsv5/tools/compiler/c6000_7.4.4
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
+"./test_division.obj" \
 "./main.obj" \
-"./interpolation.obj" \
 "./imresize.obj" \
 "./division.obj" \
 "./assmbly.obj" \
@@ -126,9 +126,9 @@ BiLinear_interpolation_dsp.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(C6000_EXECUTABLE_OUTPUTS__QUOTED) "BiLinear_interpolation_dsp.out"
-	-$(RM) "main.pp" 
-	-$(RM) "assmbly.obj" "division.obj" "imresize.obj" "interpolation.obj" "main.obj" 
-	-$(RM) "assmbly.pp" "division.pp" "imresize.pp" "interpolation.pp" 
+	-$(RM) "main.pp" "test_division.pp" 
+	-$(RM) "assmbly.obj" "division.obj" "imresize.obj" "main.obj" "test_division.obj" 
+	-$(RM) "assmbly.pp" "division.pp" "imresize.pp" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

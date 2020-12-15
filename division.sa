@@ -1,40 +1,82 @@
-; !division only for positive integer
-		.global _division
-_division: 	.cproc dividend, divisor
-		.reg result,index,cnt
+; Division between 32bit fix-point numbers
+; We ensure that the radix point of every number is located at the 17-th bit.
+; i.e. example = 0x0001.1000 = (decimal)1.5
+; Only dsigned for positive numbers.
+; Author: Wenzhong Ou, Yu-Ming Tang
+; Writen at 15th Dec, 2020.
 
-		ZERO result
-		MVK 1,index
-		CMPEQ divisor, 0, cnt
-[cnt] B label2 ;if divisor = 0, go to label2
-		CMPGT divisor, dividend, cnt
-[cnt] B label3 ;if divisor > divident, go to label3
-loop1:
-		SHL index,1,index
-		SHL divisor,1,divisor
-		CMPLT divisor, dividend, cnt
-[cnt] B loop1 ; if divisor<dividend goto loop1
-		CMPEQ divisor, dividend, cnt
-[cnt] B label1 ; if divisor=dividend goto label1
+                .global _division
+_division:      .cproc dividend, divisor
+                .reg result,index,cnt
+                .reg dividend_shift
+                ;.reg divisor_shift
+                .reg shift_left_max_dividend
+                .reg shift_left_max_divisor
 
-loop2:
-		SHR index,1,index
-		SHR divisor,1,divisor
-		SUB dividend, divisor, dividend
-		CMPLT dividend, 0, cnt
-[cnt]	ADD dividend, divisor, dividend ;if divident < 0
-[!cnt]	ADD index, result, result ;if divident still > 0
-		CMPEQ index, 0, cnt
-[cnt]	B label3 ;if index = 0, go to label3
-[!cnt]	B loop2  ;if index != 0, back to loop2
+                ;Calculate how many times can dividend and divisor be shifted
+                LMBD 1,dividend,shift_left_max_dividend
+                ;LMBD 1,divisor,shift_left_max_divisor
+
+                ZERO result
+                ZERO dividend_shift
+                ;ZERO divisor_shift
+                MVKL 0x00010000,index
+                MVKH 0x00010000,index
+                ;32 bit constant assignment should be operated like above, see: "TMS320C6000 CPU and Instruction Set Reference Guide" pp. 3-91.
+                ;index = 0x00010000
+
+                CMPEQ divisor, 0, cnt ;test if divisor == 0
+[cnt]           B zero_divisor ;if divisor = 0. Go to branch zero_divisor.
+
+test_two_num:   CMPGT divisor, dividend, cnt ;test if divisor is bigger.
+
+[cnt]           B zero_result ;if divisor > divident, go to zero_result 
+                
+                ;every thing's fine: dividend>=divisor and divisor != 0
+                ;start to shift and minus
+main_loop:
+                ;ADD divisor_shift, 1, divisor_shift
+                SHL index,1,index
+                SHL divisor,1,divisor
+                CMPLT divisor, dividend, cnt
+[cnt]           B main_loop ; if divisor<dividend, continue looping 
+                CMPEQ divisor, dividend, cnt ; else, shift enough, record result on this bit.
+[cnt]           B no_remain ; if divisor=dividend, not thing remains, goto no_remain.
+                
+                ;deal with remains
+remain_loop:
+                SHR index,1,index ; Make sure dividend>divisor
+                SHR divisor,1,divisor
+                SUB dividend, divisor, dividend
+                ;LMBD 1,dividend,shift_left_max_dividend
+                ;CMPLT dividend, 0, cnt
+
+;[cnt]          ;ADD dividend, divisor, dividend ;if dividend < 0
+
+                ADD index, result, result ; Add up to result
+               	CMPEQ dividend,0,cnt ; no remains anymore
+[cnt]			B proc_exit
+                CMPEQ index, 0, cnt ; if we are at the right-most bit,
+[cnt]           B proc_exit ;if index = 0, go to exit 
+[!cnt]          B test_two_num  ;if index != 0, back to test_two_num
 
 
-label1:
-		ADD index, result, result
-		B label3 ;jump to label3
-label2:
-		MVK -1, result
-		SHRU result, 1, result ; dividsor = 0, result should be the largest integer
-label3:   ;��ʱdividend����������result������
-		.return result
-		.endproc
+no_remain: 
+                ADD index, result, result ; Add up to result
+                B proc_exit ; To return.
+
+zero_divisor:
+                MVK -1, result
+                SHRU result, 1, result ; divisor = 0, result should be the largest integer
+
+zero_result:
+                ;ADD dividend_shift,1,dividend_shift
+                ;CMPGT dividend_shift, shift_left_max_dividend, cnt
+;[cnt]           B proc_exit
+                SHR index,1,index
+                SHL dividend,1,dividend
+                B test_two_num 
+
+proc_exit:   
+                .return result
+                .endproc

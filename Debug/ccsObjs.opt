@@ -1,1 +1,1 @@
-"./main.obj" "./interpolation.obj" "./imresize.obj" "./division.obj" "./assmbly.obj" "../DM642.cmd" -l"libc.a" 
+"./test_division.obj" "./main.obj" "./imresize.obj" "./division.obj" "./assmbly.obj" "../DM642.cmd" -l"libc.a" 

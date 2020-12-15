@@ -9,51 +9,51 @@ CMD_SRCS += \
 SA_SRCS += \
 ../assmbly.sa \
 ../division.sa \
-../imresize.sa \
-../interpolation.sa 
+../imresize.sa 
 
 C_SRCS += \
-../main.c 
+../main.c \
+../test_division.c 
 
 OBJS += \
 ./assmbly.obj \
 ./division.obj \
 ./imresize.obj \
-./interpolation.obj \
-./main.obj 
+./main.obj \
+./test_division.obj 
 
 C_DEPS += \
-./main.pp 
+./main.pp \
+./test_division.pp 
 
 SA_DEPS += \
 ./assmbly.pp \
 ./division.pp \
-./imresize.pp \
-./interpolation.pp 
+./imresize.pp 
 
 C_DEPS__QUOTED += \
-"main.pp" 
+"main.pp" \
+"test_division.pp" 
 
 OBJS__QUOTED += \
 "assmbly.obj" \
 "division.obj" \
 "imresize.obj" \
-"interpolation.obj" \
-"main.obj" 
+"main.obj" \
+"test_division.obj" 
 
 SA_DEPS__QUOTED += \
 "assmbly.pp" \
 "division.pp" \
-"imresize.pp" \
-"interpolation.pp" 
+"imresize.pp" 
 
 SA_SRCS__QUOTED += \
 "../assmbly.sa" \
 "../division.sa" \
-"../imresize.sa" \
-"../interpolation.sa" 
+"../imresize.sa" 
 
 C_SRCS__QUOTED += \
-"../main.c" 
+"../main.c" \
+"../test_division.c" 
 
 
