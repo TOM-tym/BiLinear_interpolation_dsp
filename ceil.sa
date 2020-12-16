@@ -10,7 +10,7 @@ _ceil .cproc var
 
         AND var, cst1, cnt
         CLR var, 0, 15, result
-[!cnt]  ADD result, cst2, result
+[cnt]  ADD result, cst2, result
         
     .return result
     .endproc
