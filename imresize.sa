@@ -1,14 +1,85 @@
     .global _imresize
-_imresize .cproc piColorData, poColorData, iWidth, iHeight, ratiow, ratioh
-    .reg var1, var2
-    ; start here
-	.rega 	x, ori_x, ori_a, ori_c, ratiow
-    .regb   y, ori_y, ori_b, ori_d, ratioh
-    .reg    position1, position2, position3, position4
-    .reg    gray_level1, gray_level2
-    ;
-    LDB *piColorData, var1
-    ADD var1, 1, var1
-    STB var1, *poColorData
+    .global _division
+    .global _multiply32
+    .global _floor
+    .global _ceil
+_imresize .cproc piColorData, poColorData, iWidth, iHeight, oWidth, oHeight
+    .rega x, ori_x, x_selfdef
+    .regb y, ori_y, y_selfdef
+    .reg iWidth_selfdef, iHeight_selfdef
+    .reg ratiow, ratioh
+    .reg ori_a, ori_b, ori_c, ori_d
+    .reg position1, position2, position3, position4, temp1, temp2
+    .reg position1_selfdef, position2_selfdef, position3_selfdef, position4_selfdef
+    .reg gray_level1, gray_level2, cntx, cnty
+    .reg iColor1, iColor2, iColor3, iColor4, oColor
+
+    ZERO x
+    ZERO y
+    .call ratiow = _division(iWidth, oWidth)    ;self-def dataType
+    .call ratioh = _division(iHeight, oHeight)  ;self-def dataType
+
+    SHL iWidth, 16, iWidth_selfdef      ;self-def dataType
+    SHL iHeight, 16, iHeight_selfdef    ;self-def dataType
+
+loop_height:
+loop_width:
+
+        SHL x, 16, x_selfdef    ;self-def dataType
+        SHL y, 16, y_selfdef    ;self-def dataType
+
+        .call ori_x = _multiply32(x_selfdef, ratiow)    ;self-def dataType
+        .call ori_y = _multiply32(y_selfdef, ratioh)    ;self-def dataType
+        .call ori_a = _floor(ori_x)    ;self-def dataType
+        .call ori_b = _floor(ori_y)    ;self-def dataType
+        .call ori_c = _ceil(ori_x)    ;self-def dataType
+        .call ori_d = _ceil(ori_y)    ;self-def dataType
+
+        .call temp1 = _multiply32(ori_b, iWidth_selfdef)    ;self-def dataType
+        .call temp2 = _multiply32(ori_d, iWidth_selfdef)    ;self-def dataType
+
+        ADD ori_a, temp1, position1_selfdef    ;self-def dataType
+        ADD ori_c, temp1, position2_selfdef    ;self-def dataType
+        ADD ori_a, temp2, position3_selfdef    ;self-def dataType
+        ADD ori_c, temp2, position4_selfdef    ;self-def dataType
+        
+        SHR position1_selfdef, 16, position1
+        SHR position2_selfdef, 16, position2
+        SHR position3_selfdef, 16, position3
+        SHR position4_selfdef, 16, position4
+
+        LDB *+piColorData[position1], iColor1
+        LDB *+piColorData[position2], iColor2
+        LDB *+piColorData[position3], iColor3
+        LDB *+piColorData[position4], iColor4
+
+        SUB ori_x, ori_a, temp1
+        SUB iColor2, iColor1, temp2
+        MPY temp1, temp2, temp2
+        ;.call temp2 = _multiply32(temp1, temp2)
+        ADD iColor1, temp2, gray_level1
+
+        SUB iColor4, iColor3, temp2
+        MPY temp1, temp2, temp2
+        ;.call temp2 = _multiply32(temp1, temp2)
+        ADD iColor3, temp2, gray_level2
+
+        SUB ori_y, ori_b, temp1
+        SUB gray_level2, gray_level1, temp2
+        MPY temp1, temp2, temp2
+        ;.call temp2 = _multiply32(temp1, temp2)
+        ADD gray_level1, temp2, oColor
+ 
+        MPY y, oWidth, temp1
+        ADD x, temp1, temp2
+
+        STB oColor, *+poColorData[temp2]
+
+        ADD x, 1, x     ;x add 1 first
+        CMPEQ x, oWidth, cntx
+[!cntx] B loop_width
+        ADD y, 1, y     ;y add 1 first
+        CMPEQ y, oHeight, cnty
+[!cnty] B loop_height
 
     .endproc
