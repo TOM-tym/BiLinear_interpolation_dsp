@@ -1,29 +1,20 @@
 ; Division between 32bit fix-point numbers
-; We ensure that the radix point of every number is located at the 17-th bit.
-; i.e. example = 0x0001.1000 = (decimal)1.5
+; The location of the radix point of every number is defined by parameters 'point_pos'
+; 'point_pos' stands for the length of the dicimal part (i.e. the exponent < 0).
+; e.g. point_pos = 1 means the length of the dicimal part of the number is 1.
+; e.g. point_pos = 16 ,example = 0x0001.1000 = (decimal)1.5
+; For more accurate results, point_pos should be larger.
 ; Only dsigned for positive numbers.
 ; Author: Wenzhong Ou, Yu-Ming Tang
 ; Writen at 15th Dec, 2020.
 
                 .global _division
-_division:      .cproc dividend, divisor
+_division:      .cproc dividend, divisor, point_pos
                 .reg result,index,cnt
-                .reg dividend_shift
-                ;.reg divisor_shift
-                .reg shift_left_max_dividend
-                .reg shift_left_max_divisor
-
-                ;Calculate how many times can dividend and divisor be shifted
-                LMBD 1,dividend,shift_left_max_dividend
-                ;LMBD 1,divisor,shift_left_max_divisor
 
                 ZERO result
-                ZERO dividend_shift
-                ;ZERO divisor_shift
-                MVKL 0x00010000,index
-                MVKH 0x00010000,index
-                ;32 bit constant assignment should be operated like above, see: "TMS320C6000 CPU and Instruction Set Reference Guide" pp. 3-91.
-                ;index = 0x00010000
+                MVK 1,index
+                SHL index,point_pos,index
 
                 CMPEQ divisor, 0, cnt ;test if divisor == 0
 [cnt]           B zero_divisor ;if divisor = 0. Go to branch zero_divisor.
@@ -70,9 +61,8 @@ zero_divisor:
                 SHRU result, 1, result ; divisor = 0, result should be the largest integer
 
 zero_result:
-                ;ADD dividend_shift,1,dividend_shift
-                ;CMPGT dividend_shift, shift_left_max_dividend, cnt
-;[cnt]           B proc_exit
+				CMPEQ dividend,0,cnt ; if dividend is already zero, return.
+[cnt]			B proc_exit
                 SHR index,1,index
                 SHL dividend,1,dividend
                 B test_two_num 

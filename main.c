@@ -119,25 +119,26 @@
 // // }
 #include <stdio.h>
 #include <math.h>
-extern int division(int a, int b);
-float show_fix_point(int);
+extern int division(int a, int b,int pos);
+float show_fix_point(int,int);
 int main(){
 	int dividend[] = {0x000B8000,0x00048000,0x00010000,0x00010000,0x00641000,0x00010000,0x02000000};
-	int divisor[] = {0x00038000,0x00018000,0x00020000,0x00031000,0x00021000,0x00030000,0x03000000};
+	int divisor[] = {0x00038000,0x00018000,0x00020000,0x00038000,0x00028000,0x00030000,0x03000000};
 	int i = 0;
+	int pos = 16	;
 	for (;i<7;i++){
 		int a = dividend[i];
 		int b = divisor[i];
-		int res = division(a,b);
-		float s_a = show_fix_point(a);
-		float s_b = show_fix_point(b);
-		float s_res = show_fix_point(res);
+		int res = division(a,b,pos);
+		float s_a = show_fix_point(a,pos);
+		float s_b = show_fix_point(b,pos);
+		float s_res = show_fix_point(res,pos);
 		printf("%f / %f = %f\n",s_a,s_b,s_res);
 	}
 }
-float show_fix_point(int a){
-	int integer = a>>16;
-	int i =16;
+float show_fix_point(int a,int pos){
+	int integer = a>>pos;
+	int i = pos;
 	float result = 0;
 	for (; i>0; i--){
 		if (a % 2 ==1)
