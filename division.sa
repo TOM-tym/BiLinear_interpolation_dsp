@@ -9,12 +9,12 @@
 ; Writen at 15th Dec, 2020.
 
                 .global _division
-_division:      .cproc dividend, divisor, point_pos
+_division:      .cproc dividend, divisor
                 .reg result,index,cnt
 
                 ZERO result
                 MVK 1,index
-                SHL index,point_pos,index
+                SHL index,16,index
 
                 CMPEQ divisor, 0, cnt ;test if divisor == 0
 [cnt]           B zero_divisor ;if divisor = 0. Go to branch zero_divisor.
