@@ -4,11 +4,10 @@
     .global _floor
     .global _ceil
 _imresize .cproc piColorData, poColorData, iWidth, iHeight, oWidth, oHeight
-    .rega x, ori_x, x_selfdef
-    .regb y, ori_y, y_selfdef
+    .rega x, ori_x, x_selfdef, ori_a, ori_c
+    .regb y, ori_y, y_selfdef, ori_b, ori_d
     .reg iWidth_selfdef, iHeight_selfdef
     .reg ratiow, ratioh
-    .reg ori_a, ori_b, ori_c, ori_d
     .reg position1, position2, position3, position4, temp1, temp2
     .reg position1_selfdef, position2_selfdef, position3_selfdef, position4_selfdef
     .reg gray_level1, gray_level2, cntx, cnty
@@ -53,24 +52,27 @@ loop_width:
         LDB *+piColorData[position3], iColor3
         LDB *+piColorData[position4], iColor4
 
-        SUB ori_x, ori_a, temp1
+        SUB ori_x, ori_a, temp1             ;self-def dataType
         SUB iColor2, iColor1, temp2
-        MPY temp1, temp2, temp2
-        ;.call temp2 = _multiply32(temp1, temp2)
-        ADD iColor1, temp2, gray_level1
+        SHL temp2, 16, temp2                ;self-def dataType
+        .call temp2 = _multiply32(temp1, temp2) ;self-def dataType
+        SHL iColor1, 16, iColor1            ;self-def dataType
+        ADD iColor1, temp2, gray_level1     ;self-def dataType
 
         SUB iColor4, iColor3, temp2
-        MPY temp1, temp2, temp2
-        ;.call temp2 = _multiply32(temp1, temp2)
-        ADD iColor3, temp2, gray_level2
+        SHL temp2, 16, temp2                ;self-def dataType
+        .call temp2 = _multiply32(temp1, temp2) ;self-def dataType
+        SHL iColor3, 16, iColor3            ;self-def dataType
+        ADD iColor3, temp2, gray_level2     ;self-def dataType
 
-        SUB ori_y, ori_b, temp1
-        SUB gray_level2, gray_level1, temp2
-        MPY temp1, temp2, temp2
-        ;.call temp2 = _multiply32(temp1, temp2)
-        ADD gray_level1, temp2, oColor
+        SUB ori_y, ori_b, temp1             ;self-def dataType
+        SUB gray_level2, gray_level1, temp2 ;self-def dataType
+        .call temp2 = _multiply32(temp1, temp2) ;self-def dataType
+        ADD gray_level1, temp2, oColor      ;self-def dataType
+
+        SHRU oColor, 16, oColor
  
-        MPY y, oWidth, temp1
+        MPYU y, oWidth, temp1
         ADD x, temp1, temp2
 
         STB oColor, *+poColorData[temp2]
@@ -78,6 +80,7 @@ loop_width:
         ADD x, 1, x     ;x add 1 first
         CMPEQ x, oWidth, cntx
 [!cntx] B loop_width
+        ZERO x
         ADD y, 1, y     ;y add 1 first
         CMPEQ y, oHeight, cnty
 [!cnty] B loop_height
