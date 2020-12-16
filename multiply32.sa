@@ -1,0 +1,16 @@
+    .global _multiply32
+_multiply32 .cproc var1, var2
+    .reg res1, res2, res3, res4, dst1, dst2, dst
+
+    MPYU var1, var2, res1
+||  MPYHLU var1, var2, res2
+||  MPYLHU var1, var2, res3
+||  MPYH var1, var2, res4
+    SHR res1, 16, res1
+||  SHL res4, 16, res4
+    ADD res1, res2, dst1
+||  ADD res3, res4, dst2
+    ADD dst1, dst2, dst
+
+    .return dst
+    .endproc

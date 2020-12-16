@@ -1,0 +1,7 @@
+    .global _floor
+_floor .cproc var
+
+    CLR var, 0, 15, var
+
+    .return var
+    .endproc
