@@ -7,10 +7,10 @@
 #include "custombmplib.h"
 
 const char iFileName[] = "lena512.bmp";
-const char oFileName[] = "result4.bmp";
+const char oFileName[] = "result1.bmp";
 const int output_size[2] = {1024, 1024};	//output HEIGHT & WIDTH
 
-void imresize(BYTE* psrc, BYTE* pdst, int iWidth, int iHeight, int oWidth, int oHeight);
+void imresize(BYTE* psrc, BYTE* pdst, int iWidth, int iHeight, int oWidth, int oHeight, int pos);
 
 int main(void) {
 	BITMAPFILEHEADER ibmfh, obmfh;	//inBitmapFileHead, outBitmapFileHead
@@ -58,7 +58,7 @@ int main(void) {
 	BYTE *poColorData = (BYTE *)malloc(obmih.biSizeImage);	//分配存储输出图像数据的空间
 	memset(poColorData, 0, obmih.biSizeImage);
 
-	imresize(piColorData, poColorData, ibmih.biWidth, ibmih.biHeight, obmih.biWidth, obmih.biHeight);
+	imresize(piColorData, poColorData, ibmih.biWidth, ibmih.biHeight, obmih.biWidth, obmih.biHeight, 11);
 
 	fwrite(poColorData, 1, obmih.biSizeImage, pofile);   //将处理完图像数据区写回文件
 	printf("finish.\n");

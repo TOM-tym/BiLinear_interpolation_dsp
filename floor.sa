@@ -1,7 +1,7 @@
     .global _floor
-_floor .cproc var
-
-    CLR var, 0, 15, var
-
+_floor .cproc var, pos
+	SUB pos, 1, pos
+    CLR var, 0, pos, var
+	ADD pos, 1, pos
     .return var
     .endproc
