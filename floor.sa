@@ -1,7 +1,10 @@
     .global _floor
 _floor .cproc var, pos
-	SUB pos, 1, pos
-    CLR var, 0, pos, var
-	ADD pos, 1, pos
+    .reg cst
+
+    MVK 0xFFFFFFFF, cst    ;cst=0xFFFF0000
+    MVKH 0xFFFFFFFF, cst
+    SHL cst, pos, cst
+	AND var, cst, var
     .return var
     .endproc
