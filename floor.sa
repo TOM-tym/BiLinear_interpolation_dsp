@@ -1,5 +1,5 @@
-    .global _floor
-_floor .cproc var, pos
+    .global _my_floor
+_my_floor .cproc var, pos
     .reg cst
 
     MVK 0xFFFFFFFF, cst    ;cst=0xFFFF0000

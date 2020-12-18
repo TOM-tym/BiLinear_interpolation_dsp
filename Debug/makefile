@@ -4,11 +4,10 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := C:/Program Files/ccsv5/tools/compiler/c6000_7.4.4
+CG_TOOL_ROOT := F:/software/ccs/ccsv5/tools/compiler/c6000_7.4.4
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
-"./test_division.obj" \
 "./multiply32.obj" \
 "./main.obj" \
 "./imresize.obj" \
@@ -122,15 +121,15 @@ all: BiLinear_interpolation_dsp.out
 BiLinear_interpolation_dsp.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: C6000 Linker'
-	"C:/Program Files/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6400 --abi=coffabi -g --define=dm642 --display_error_number --diag_warning=225 --diag_wrap=off -z --stack_size=0x200000 -m"BiLinear_interpolation_dsp.map" --heap_size=0x200000 -i"C:/Program Files/ccsv5/tools/compiler/c6000_7.4.4/lib" -i"C:/Program Files/ccsv5/tools/compiler/c6000_7.4.4/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="BiLinear_interpolation_dsp_linkInfo.xml" --rom_model -o "BiLinear_interpolation_dsp.out" $(ORDERED_OBJS)
+	"F:/software/ccs/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6400 --abi=coffabi -g --define=dm642 --display_error_number --diag_warning=225 --diag_wrap=off -z --stack_size=0x200000 -m"BiLinear_interpolation_dsp.map" --heap_size=0x200000 -i"F:/software/ccs/ccsv5/tools/compiler/c6000_7.4.4/lib" -i"F:/software/ccs/ccsv5/tools/compiler/c6000_7.4.4/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="BiLinear_interpolation_dsp_linkInfo.xml" --rom_model -o "BiLinear_interpolation_dsp.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(C6000_EXECUTABLE_OUTPUTS__QUOTED) "BiLinear_interpolation_dsp.out"
-	-$(RM) "main.pp" "test_division.pp" 
-	-$(RM) "assmbly.obj" "ceil.obj" "division.obj" "floor.obj" "imresize.obj" "main.obj" "multiply32.obj" "test_division.obj" 
+	-$(RM) "main.pp" 
+	-$(RM) "assmbly.obj" "ceil.obj" "division.obj" "floor.obj" "imresize.obj" "main.obj" "multiply32.obj" 
 	-$(RM) "assmbly.pp" "ceil.pp" "division.pp" "floor.pp" "imresize.pp" "multiply32.pp" 
 	-@echo 'Finished clean'
 	-@echo ' '

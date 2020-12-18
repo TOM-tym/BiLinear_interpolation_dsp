@@ -15,8 +15,7 @@ SA_SRCS += \
 ../multiply32.sa 
 
 C_SRCS += \
-../main.c \
-../test_division.c 
+../main.c 
 
 OBJS += \
 ./assmbly.obj \
@@ -25,12 +24,10 @@ OBJS += \
 ./floor.obj \
 ./imresize.obj \
 ./main.obj \
-./multiply32.obj \
-./test_division.obj 
+./multiply32.obj 
 
 C_DEPS += \
-./main.pp \
-./test_division.pp 
+./main.pp 
 
 SA_DEPS += \
 ./assmbly.pp \
@@ -41,8 +38,7 @@ SA_DEPS += \
 ./multiply32.pp 
 
 C_DEPS__QUOTED += \
-"main.pp" \
-"test_division.pp" 
+"main.pp" 
 
 OBJS__QUOTED += \
 "assmbly.obj" \
@@ -51,8 +47,7 @@ OBJS__QUOTED += \
 "floor.obj" \
 "imresize.obj" \
 "main.obj" \
-"multiply32.obj" \
-"test_division.obj" 
+"multiply32.obj" 
 
 SA_DEPS__QUOTED += \
 "assmbly.pp" \
@@ -71,7 +66,6 @@ SA_SRCS__QUOTED += \
 "../multiply32.sa" 
 
 C_SRCS__QUOTED += \
-"../main.c" \
-"../test_division.c" 
+"../main.c" 
 
 

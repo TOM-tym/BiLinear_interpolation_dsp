@@ -1,1 +1,1 @@
-"./test_division.obj" "./multiply32.obj" "./main.obj" "./imresize.obj" "./floor.obj" "./division.obj" "./ceil.obj" "./assmbly.obj" "../DM642.cmd" -l"libc.a" 
+"./multiply32.obj" "./main.obj" "./imresize.obj" "./floor.obj" "./division.obj" "./ceil.obj" "./assmbly.obj" "../DM642.cmd" -l"libc.a" 

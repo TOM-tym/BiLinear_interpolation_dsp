@@ -1,14 +1,14 @@
-/*
- * main.c
- */
+// /*
+//  * main.c
+//  */
 
 #include <stdio.h>
 #include <math.h>
 #include "custombmplib.h"
 
-const char iFileName[] = "lena128.bmp";
-const char oFileName[] = "result4.bmp";
-const int output_size[2] = {192,192};	//output HEIGHT & WIDTH
+const char iFileName[] = "lena512.bmp";
+const char oFileName[] = "result5.bmp";
+const int output_size[2] = {1024,1024};	//output HEIGHT & WIDTH
 
 void imresize(BYTE* psrc, BYTE* pdst, int iWidth, int iHeight, int oWidth, int oHeight, int pos);
 
@@ -58,7 +58,7 @@ int main(void) {
 	BYTE *poColorData = (BYTE *)malloc(obmih.biSizeImage);	//鍒嗛厤瀛樺偍杈撳嚭鍥惧儚鏁版嵁鐨勭┖闂�
 	memset(poColorData, 0, obmih.biSizeImage);
 
-	imresize(piColorData,poColorData, ibmih.biWidth, ibmih.biHeight, obmih.biWidth, obmih.biHeight, 16);
+	imresize(piColorData,poColorData, ibmih.biWidth, ibmih.biHeight, obmih.biWidth, obmih.biHeight, 12);
 
 	fwrite(poColorData, 1, obmih.biSizeImage, pofile);   //灏嗗鐞嗗畬鍥惧儚鏁版嵁鍖哄啓鍥炴枃浠�
 	printf("finish.\n");
@@ -155,3 +155,38 @@ int main(void) {
 // 	return;
 // }
 
+
+int test_main(){
+	extern int division(int a, int b);
+extern int my_ceil(int,int);
+extern int my_floor(int,int);
+float show_fix_point(int,int);
+	int dividend[] = {0x000B8000,0x00048000,0x00010000,0x00010000,0x00641000,0x00010000,0x02000000};
+	int divisor[] = {0x00038000,0x00018000,0x00020000,0x00031000,0x00021000,0x00030000,0x03000000};
+	int i = 0;
+	int pos = 16;
+	for (;i<7;i++){
+		int a = dividend[i];
+		int b = divisor[i];
+		int res = my_ceil(a,pos);
+		int res2 = my_ceil(b,pos);
+		float s_a = show_fix_point(a,pos);
+		float s_b = show_fix_point(b,pos);
+		float s_res = show_fix_point(res,pos);
+		float s_res_2 = show_fix_point(res2,pos);
+		printf("%f:%f,%f:%f\n",s_a,s_res,s_b,s_res_2);
+	}
+}
+float show_fix_point(int a, int pos){
+	int integer = a>>pos;
+	int i =pos;
+	float result = 0;
+	for (; i>0; i--){
+		if (a % 2 ==1)
+			result += pow(2,-i);
+		a = a >> 1;
+	}
+	float res = (float)integer + result;
+	//printf("%f",res);
+	return res;
+}
