@@ -7,8 +7,8 @@
 #include "custombmplib.h"
 
 const char iFileName[] = "lena512.bmp";
-const char oFileName[] = "result7.bmp";
-const int output_size[2] = {768,768};	//output HEIGHT & WIDTH
+const char oFileName[] = "result6.bmp";
+const int output_size[2] = {1024,1024};	//output HEIGHT & WIDTH
 const int radix_pos = 12;
 void imresize(BYTE* psrc, BYTE* pdst, int iWidth, int iHeight, int oWidth, int oHeight, int pos);
 
@@ -37,9 +37,9 @@ int main(void) {
 	obmih = ibmih;
 	obmih.biHeight = output_size[0];
 	obmih.biWidth = output_size[1];
-	int oWidthByte = WIDTHBYTES(obmih.biWidth*obmih.biBitCount);	//æˆæ’³åš­é¥æƒ§å„šå§£å¿šî”‘éå¿•ç¤Œæ´æ–¿å´°ç€›æ¥„å¦­
-	obmih.biSizeImage = oWidthByte * obmih.biHeight;		//éæ‘ç®™æˆæ’³åš­é¥æƒ§å„šéå¿•ç¤Œéµï¿½å´°ç€›æ¥„å¦­
-	obmfh.bfSize = obmfh.bfOffBits + obmih.biSizeImage;		//æˆæ’³åš­é¥æƒ§å„šé‚å›¦æ¬¢é¨å‹«ç“§é‘ºå‚¦ç´™é–å‘®å«­é‚å›¦æ¬¢æ¾¶æ‘æ‹°éç‰ˆåµé”›ï¿½
+	int oWidthByte = WIDTHBYTES(obmih.biWidth*obmih.biBitCount);	//Êä³öÍ¼ÏñÃ¿ĞĞÏñËØÓ¦Õ¼×Ö½Ú
+	obmih.biSizeImage = oWidthByte * obmih.biHeight;		//Õû·ùÊä³öÍ¼ÏñÏñËØËùÕ¼×Ö½Ú
+	obmfh.bfSize = obmfh.bfOffBits + obmih.biSizeImage;		//Êä³öÍ¼ÏñÎÄ¼şµÄ×Ö½Ú£¨°üÀ¨ÎÄ¼şÍ·ºÍÊı¾İ£©
 	fwrite(&obmfh, 1, sizeof(BITMAPFILEHEADER), pofile);
 	fwrite(&obmih, 1, sizeof(BITMAPINFOHEADER), pofile);
 
@@ -50,17 +50,17 @@ int main(void) {
 	fwrite(pPale, 1, ibmfh.bfOffBits-Offbit_File_Info, pofile);
 
 	//read color data
-	unsigned int iWidthByte = WIDTHBYTES(ibmih.biWidth * ibmih.biBitCount);	//æˆæ’³å†é¥æƒ§å„šå§£å¿šî”‘éå¿•ç¤Œæ´æ–¿å´°ç€›æ¥„å¦­
-	BYTE *piColorData = (BYTE *)malloc(ibmih.biSizeImage);	//é’å—›å¤ç€›æ¨ºåæˆæ’³å†é¥æƒ§å„šéç‰ˆåµé¨å‹­â”–é—‚ï¿½
+	unsigned int iWidthByte = WIDTHBYTES(ibmih.biWidth * ibmih.biBitCount);	//ÊäÈëÍ¼ÏñÃ¿ĞĞÏñËØÓ¦Õ¼×Ö½Ú
+	BYTE *piColorData = (BYTE *)malloc(ibmih.biSizeImage);	//·ÖÅä´æ´¢ÊäÈëÍ¼ÏñÊı¾İµÄ¿Õ¼ä
 	fread(piColorData, 1, ibmih.biSizeImage, pifile);
 
 	//bilinear interpolation resize
-	BYTE *poColorData = (BYTE *)malloc(obmih.biSizeImage);	//é’å—›å¤ç€›æ¨ºåæˆæ’³åš­é¥æƒ§å„šéç‰ˆåµé¨å‹­â”–é—‚ï¿½
+	BYTE *poColorData = (BYTE *)malloc(obmih.biSizeImage);	//·ÖÅä´æ´¢Êä³öÍ¼ÏñÊı¾İµÄ¿Õ¼ä
 	memset(poColorData, 0, obmih.biSizeImage);
 
 	imresize(piColorData,poColorData, ibmih.biWidth, ibmih.biHeight, obmih.biWidth, obmih.biHeight, radix_pos);
 
-	fwrite(poColorData, 1, obmih.biSizeImage, pofile);   //çå——î˜µéå——ç•¬é¥æƒ§å„šéç‰ˆåµé–å“„å•“é¥ç‚´æƒæµ ï¿½
+	fwrite(poColorData, 1, obmih.biSizeImage, pofile);   //½«´¦ÀíÍêÍ¼ÏñÊı¾İÇøĞ´»ØÎÄ¼ş
 	printf("finish.\n");
 	fclose(pifile);
     fclose(pofile);
