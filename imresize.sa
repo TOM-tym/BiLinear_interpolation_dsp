@@ -1,76 +1,80 @@
     .global _imresize
     .global _division
     .global _multiply32
-    .global _floor
-    .global _ceil
-_imresize .cproc piColorData, poColorData, iWidth, iHeight, oWidth, oHeight
+    .global _my_floor
+    .global _my_ceil
+    .global _prints
+    .global _my_rounding
+_imresize .cproc piColorData, poColorData, iWidth, iHeight, oWidth, oHeight, pos
     .rega x, ori_x, x_selfdef, ori_a, ori_c
     .regb y, ori_y, y_selfdef, ori_b, ori_d
     .reg iWidth_selfdef, iHeight_selfdef
     .reg ratiow, ratioh
     .reg position1, position2, position3, position4, temp1, temp2
     .reg position1_selfdef, position2_selfdef, position3_selfdef, position4_selfdef
-    .reg gray_level1, gray_level2, cntx, cnty
+    .reg gray_level1, gray_level2, cnt
     .reg iColor1, iColor2, iColor3, iColor4, oColor
 
     ZERO x
     ZERO y
-    .call ratiow = _division(iWidth, oWidth)    ;self-def dataType
-    .call ratioh = _division(iHeight, oHeight)  ;self-def dataType
+    .call ratiow = _division(iWidth, oWidth, pos)    ;self-def dataType
+    .call ratioh = _division(iHeight, oHeight, pos)  ;self-def dataType
 
-    SHL iWidth, 16, iWidth_selfdef      ;self-def dataType
-    SHL iHeight, 16, iHeight_selfdef    ;self-def dataType
+    SHL iWidth, pos, iWidth_selfdef      ;self-def dataType
+    SHL iHeight, pos, iHeight_selfdef    ;self-def dataType
 
 loop_height:
 loop_width:
 
-        SHL x, 16, x_selfdef    ;self-def dataType
-        SHL y, 16, y_selfdef    ;self-def dataType
+        SHL x, pos, x_selfdef    ;self-def dataType
+        SHL y, pos, y_selfdef    ;self-def dataType
 
-        .call ori_x = _multiply32(x_selfdef, ratiow)    ;self-def dataType
-        .call ori_y = _multiply32(y_selfdef, ratioh)    ;self-def dataType
-        .call ori_a = _floor(ori_x)    ;self-def dataType
-        .call ori_b = _floor(ori_y)    ;self-def dataType
-        .call ori_c = _ceil(ori_x)    ;self-def dataType
-        .call ori_d = _ceil(ori_y)    ;self-def dataType
+        .call ori_x = _multiply32(x_selfdef, ratiow, pos)    ;self-def dataType
+        .call ori_y = _multiply32(y_selfdef, ratioh, pos)    ;self-def dataType
+        .call ori_a = _my_floor(ori_x, pos)    ;self-def dataType
+        .call ori_b = _my_floor(ori_y, pos)    ;self-def dataType
+        .call ori_c = _my_ceil(ori_x, pos)    ;self-def dataType
+        .call ori_d = _my_ceil(ori_y, pos)    ;self-def dataType
 
-        .call temp1 = _multiply32(ori_b, iWidth_selfdef)    ;self-def dataType
-        .call temp2 = _multiply32(ori_d, iWidth_selfdef)    ;self-def dataType
+        .call temp1 = _multiply32(ori_b, iWidth_selfdef, pos)    ;self-def dataType
+        .call temp2 = _multiply32(ori_d, iWidth_selfdef, pos)    ;self-def dataType
 
         ADD ori_a, temp1, position1_selfdef    ;self-def dataType
         ADD ori_c, temp1, position2_selfdef    ;self-def dataType
         ADD ori_a, temp2, position3_selfdef    ;self-def dataType
         ADD ori_c, temp2, position4_selfdef    ;self-def dataType
         
-        SHR position1_selfdef, 16, position1
-        SHR position2_selfdef, 16, position2
-        SHR position3_selfdef, 16, position3
-        SHR position4_selfdef, 16, position4
+        SHRU position1_selfdef, pos, position1
+        SHRU position2_selfdef, pos, position2
+        SHRU position3_selfdef, pos, position3
+        SHRU position4_selfdef, pos, position4
 
-        LDB *+piColorData[position1], iColor1
-        LDB *+piColorData[position2], iColor2
-        LDB *+piColorData[position3], iColor3
-        LDB *+piColorData[position4], iColor4
+        LDBU *+piColorData[position1], iColor1
+        LDBU *+piColorData[position2], iColor2
+        LDBU *+piColorData[position3], iColor3
+        LDBU *+piColorData[position4], iColor4
 
         SUB ori_x, ori_a, temp1             ;self-def dataType
         SUB iColor2, iColor1, temp2
-        SHL temp2, 16, temp2                ;self-def dataType
-        .call temp2 = _multiply32(temp1, temp2) ;self-def dataType
-        SHL iColor1, 16, iColor1            ;self-def dataType
+        SHL temp2, pos, temp2                ;self-def dataType
+        .call temp2 = _multiply32(temp1, temp2, pos) ;self-def dataType
+        SHL iColor1, pos, iColor1            ;self-def dataType
         ADD iColor1, temp2, gray_level1     ;self-def dataType
 
-        SUB iColor4, iColor3, temp2
-        SHL temp2, 16, temp2                ;self-def dataType
-        .call temp2 = _multiply32(temp1, temp2) ;self-def dataType
-        SHL iColor3, 16, iColor3            ;self-def dataType
-        ADD iColor3, temp2, gray_level2     ;self-def dataType
 
+        SUB iColor4, iColor3, temp2
+        SHL temp2, pos, temp2                ;self-def dataType
+        .call temp2 = _multiply32(temp1, temp2, pos) ;self-def dataType
+        SHL iColor3, pos, iColor3            ;self-def dataType
+        ADD iColor3, temp2, gray_level2     ;self-def dataType
         SUB ori_y, ori_b, temp1             ;self-def dataType
+
         SUB gray_level2, gray_level1, temp2 ;self-def dataType
-        .call temp2 = _multiply32(temp1, temp2) ;self-def dataType
+        .call temp2 = _multiply32(temp1, temp2, pos) ;self-def dataType
         ADD gray_level1, temp2, oColor      ;self-def dataType
 
-        SHRU oColor, 16, oColor
+		.call oColor = _my_rounding(oColor, pos) ;rounding oColor result
+        SHRU oColor, pos, oColor
  
         MPYU y, oWidth, temp1
         ADD x, temp1, temp2
@@ -78,11 +82,11 @@ loop_width:
         STB oColor, *+poColorData[temp2]
 
         ADD x, 1, x     ;x add 1 first
-        CMPEQ x, oWidth, cntx
-[!cntx] B loop_width
+        CMPEQ x, oWidth, cnt
+[!cnt] B loop_width
         ZERO x
         ADD y, 1, y     ;y add 1 first
-        CMPEQ y, oHeight, cnty
-[!cnty] B loop_height
+        CMPEQ y, oHeight, cnt
+[!cnt] B loop_height
 
     .endproc

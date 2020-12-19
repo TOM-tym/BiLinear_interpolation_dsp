@@ -1,15 +1,17 @@
-    .global _ceil
-_ceil .cproc var
+    .global _my_ceil
+_my_ceil .cproc var, pos
 
-        .reg cnt, cst1, cst2, result
+        .reg cnt, cst1, cst2, cst3, result
   
-        MVK 0x0000FFFF, cst1    ;cst1=0x0000FFFF
-        MVKH 0x0000FFFF, cst1
-        MVK 0x00010000, cst2    ;cst2=0x00010000
-        MVKH 0x00010000, cst2
-
-        AND var, cst1, cnt
-        CLR var, 0, 15, result
+        MVK 0xFFFFFFFF, cst1    ;cst1=0xFFFF0000
+        MVKH 0xFFFFFFFF, cst1
+        SHL cst1, pos, cst1
+        NOT cst1, cst3          ;cst3=0x0000FFFF
+        MVK 0x00000001, cst2    ;cst2=0x00010000
+        MVKH 0x00000001, cst2
+		SHL cst2, pos, cst2
+        AND var, cst3, cnt
+        AND var, cst1, result
 [cnt]  ADD result, cst2, result
         
     .return result

@@ -1,0 +1,17 @@
+    .global _my_rounding
+_my_rounding .cproc var, pos
+    .reg cst, tmp
+
+    ; add 0.5 to var
+	MVK 0x00000001, tmp
+	SHL tmp, pos, tmp
+	SHRU tmp, 1, tmp
+	ADD var, tmp, var
+
+	;floor operation
+    MVK 0xFFFFFFFF, cst    ;cst=0xFFFF0000
+    MVKH 0xFFFFFFFF, cst
+    SHL cst, pos, cst
+	AND var, cst, var
+    .return var
+    .endproc
