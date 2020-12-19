@@ -55,25 +55,61 @@ loop_width:
         LDBU *+piColorData[position4], iColor4
 
         SUB ori_x, ori_a, temp1             ;self-def dataType
+
+        CMPGT iColor1, iColor2, cnt
+[cnt]   B iColor1_bigger
+[!cnt]  B iColor2_bigger
+iColor1_bigger:
+        SUB iColor1, iColor2, temp2
+        SHL temp2, pos, temp2                ;self-def dataType
+        .call temp2 = _multiply32(temp1, temp2, pos) ;self-def dataType
+        SHL iColor1, pos, iColor1            ;self-def dataType
+        SUB iColor1, temp2, gray_level1     ;self-def dataType
+        B next
+
+iColor2_bigger:
         SUB iColor2, iColor1, temp2
         SHL temp2, pos, temp2                ;self-def dataType
         .call temp2 = _multiply32(temp1, temp2, pos) ;self-def dataType
         SHL iColor1, pos, iColor1            ;self-def dataType
         ADD iColor1, temp2, gray_level1     ;self-def dataType
 
+next:
+        CMPGT iColor3, iColor4, cnt
+[cnt]   B iColor3_bigger
+[!cnt]  B iColor4_bigger
+iColor3_bigger:
+        SUB iColor3, iColor4, temp2
+        SHL temp2, pos, temp2                ;self-def dataType
+        .call temp2 = _multiply32(temp1, temp2, pos) ;self-def dataType
+        SHL iColor3, pos, iColor3            ;self-def dataType
+        SUB iColor3, temp2, gray_level2     ;self-def dataType
+        B next2
 
+iColor4_bigger:
         SUB iColor4, iColor3, temp2
         SHL temp2, pos, temp2                ;self-def dataType
         .call temp2 = _multiply32(temp1, temp2, pos) ;self-def dataType
         SHL iColor3, pos, iColor3            ;self-def dataType
         ADD iColor3, temp2, gray_level2     ;self-def dataType
-        SUB ori_y, ori_b, temp1             ;self-def dataType
 
+next2:
+        SUB ori_y, ori_b, temp1             ;self-def dataType
+        CMPGT gray_level1, gray_level2, cnt
+[cnt]   B level1_bigger
+[!cnt]  B level2_bigger
+level1_bigger:
+        SUB gray_level1, gray_level2, temp2 ;self-def dataType
+        .call temp2 = _multiply32(temp1, temp2, pos) ;self-def dataType
+        SUB gray_level1, temp2, oColor      ;self-def dataType
+        B next3
+level2_bigger:
         SUB gray_level2, gray_level1, temp2 ;self-def dataType
         .call temp2 = _multiply32(temp1, temp2, pos) ;self-def dataType
         ADD gray_level1, temp2, oColor      ;self-def dataType
+next3:
 
-		.call oColor = _my_rounding(oColor, pos) ;rounding oColor result
+		;.call oColor = _my_rounding(oColor, pos) ;rounding oColor result
         SHRU oColor, pos, oColor
  
         MPYU y, oWidth, temp1

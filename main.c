@@ -7,8 +7,8 @@
 #include "custombmplib.h"
 
 const char iFileName[] = "lena512.bmp";
-const char oFileName[] = "result6.bmp";
-const int output_size[2] = {1024,1024};	//output HEIGHT & WIDTH
+const char oFileName[] = "result7.bmp";
+const int output_size[2] = {768,768};	//output HEIGHT & WIDTH
 const int radix_pos = 12;
 void imresize(BYTE* psrc, BYTE* pdst, int iWidth, int iHeight, int oWidth, int oHeight, int pos);
 
@@ -37,9 +37,9 @@ int main(void) {
 	obmih = ibmih;
 	obmih.biHeight = output_size[0];
 	obmih.biWidth = output_size[1];
-	int oWidthByte = WIDTHBYTES(obmih.biWidth*obmih.biBitCount);	//输出图像每行像素应占字节
-	obmih.biSizeImage = oWidthByte * obmih.biHeight;		//整幅输出图像像素所占字节
-	obmfh.bfSize = obmfh.bfOffBits + obmih.biSizeImage;		//输出图像文件的字节（包括文件头和数据）
+	int oWidthByte = WIDTHBYTES(obmih.biWidth*obmih.biBitCount);	//杈撳嚭鍥惧儚姣忚鍍忕礌搴斿崰瀛楄妭
+	obmih.biSizeImage = oWidthByte * obmih.biHeight;		//鏁村箙杈撳嚭鍥惧儚鍍忕礌鎵�崰瀛楄妭
+	obmfh.bfSize = obmfh.bfOffBits + obmih.biSizeImage;		//杈撳嚭鍥惧儚鏂囦欢鐨勫瓧鑺傦紙鍖呮嫭鏂囦欢澶村拰鏁版嵁锛�
 	fwrite(&obmfh, 1, sizeof(BITMAPFILEHEADER), pofile);
 	fwrite(&obmih, 1, sizeof(BITMAPINFOHEADER), pofile);
 
@@ -50,17 +50,17 @@ int main(void) {
 	fwrite(pPale, 1, ibmfh.bfOffBits-Offbit_File_Info, pofile);
 
 	//read color data
-	unsigned int iWidthByte = WIDTHBYTES(ibmih.biWidth * ibmih.biBitCount);	//输入图像每行像素应占字节
-	BYTE *piColorData = (BYTE *)malloc(ibmih.biSizeImage);	//分配存储输入图像数据的空间
+	unsigned int iWidthByte = WIDTHBYTES(ibmih.biWidth * ibmih.biBitCount);	//杈撳叆鍥惧儚姣忚鍍忕礌搴斿崰瀛楄妭
+	BYTE *piColorData = (BYTE *)malloc(ibmih.biSizeImage);	//鍒嗛厤瀛樺偍杈撳叆鍥惧儚鏁版嵁鐨勭┖闂�
 	fread(piColorData, 1, ibmih.biSizeImage, pifile);
 
 	//bilinear interpolation resize
-	BYTE *poColorData = (BYTE *)malloc(obmih.biSizeImage);	//分配存储输出图像数据的空间
+	BYTE *poColorData = (BYTE *)malloc(obmih.biSizeImage);	//鍒嗛厤瀛樺偍杈撳嚭鍥惧儚鏁版嵁鐨勭┖闂�
 	memset(poColorData, 0, obmih.biSizeImage);
 
 	imresize(piColorData,poColorData, ibmih.biWidth, ibmih.biHeight, obmih.biWidth, obmih.biHeight, radix_pos);
 
-	fwrite(poColorData, 1, obmih.biSizeImage, pofile);   //将处理完图像数据区写回文件
+	fwrite(poColorData, 1, obmih.biSizeImage, pofile);   //灏嗗鐞嗗畬鍥惧儚鏁版嵁鍖哄啓鍥炴枃浠�
 	printf("finish.\n");
 	fclose(pifile);
     fclose(pofile);
