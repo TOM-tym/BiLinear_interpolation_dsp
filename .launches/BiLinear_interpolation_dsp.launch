@@ -7,7 +7,7 @@
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_TARGET_CONFIG" value="${target_config_active_default:BiLinear_interpolation_dsp}"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.Texas Instruments Simulator/C64x" value="D:/Learning Material\Finished\dsp\ccs\mine\BiLinear_interpolation_dsp\Debug\BiLinear_interpolation_dsp.out"/>
 <mapAttribute key="com.ti.ccstudio.debug.ui.displayFormats">
-<mapEntry key="Texas Instruments Simulator/C64x@##separator##@0" value="32-Bit Hex - TI Style"/>
+<mapEntry key="Texas Instruments Simulator/C64x@##separator##@0" value="8-Bit Hex - TI Style"/>
 </mapAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/BiLinear_interpolation_dsp"/>

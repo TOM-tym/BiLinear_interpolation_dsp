@@ -12,7 +12,8 @@ SA_SRCS += \
 ../division.sa \
 ../floor.sa \
 ../imresize.sa \
-../multiply32.sa 
+../multiply32.sa \
+../rounding.sa 
 
 C_SRCS += \
 ../main.c 
@@ -24,7 +25,8 @@ OBJS += \
 ./floor.obj \
 ./imresize.obj \
 ./main.obj \
-./multiply32.obj 
+./multiply32.obj \
+./rounding.obj 
 
 C_DEPS += \
 ./main.pp 
@@ -35,7 +37,8 @@ SA_DEPS += \
 ./division.pp \
 ./floor.pp \
 ./imresize.pp \
-./multiply32.pp 
+./multiply32.pp \
+./rounding.pp 
 
 C_DEPS__QUOTED += \
 "main.pp" 
@@ -47,7 +50,8 @@ OBJS__QUOTED += \
 "floor.obj" \
 "imresize.obj" \
 "main.obj" \
-"multiply32.obj" 
+"multiply32.obj" \
+"rounding.obj" 
 
 SA_DEPS__QUOTED += \
 "assmbly.pp" \
@@ -55,7 +59,8 @@ SA_DEPS__QUOTED += \
 "division.pp" \
 "floor.pp" \
 "imresize.pp" \
-"multiply32.pp" 
+"multiply32.pp" \
+"rounding.pp" 
 
 SA_SRCS__QUOTED += \
 "../assmbly.sa" \
@@ -63,7 +68,8 @@ SA_SRCS__QUOTED += \
 "../division.sa" \
 "../floor.sa" \
 "../imresize.sa" \
-"../multiply32.sa" 
+"../multiply32.sa" \
+"../rounding.sa" 
 
 C_SRCS__QUOTED += \
 "../main.c" 
