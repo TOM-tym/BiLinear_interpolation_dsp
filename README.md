@@ -27,8 +27,8 @@ This implementation is one part of homework of course `Principles and Applicatio
 
 Below, we show a resized lena photo from 512x512 px to 1024x1024 px. 
 
-![lena512](D:\Learning Material\Finished\dsp\ccs\mine\BiLinear_interpolation_dsp\Debug\lena512.bmp)
+![lena512](imgs/lena512.bmp)
 
 
 
-![result6](D:\Learning Material\Finished\dsp\ccs\mine\BiLinear_interpolation_dsp\Debug\result6.bmp)
+![result6](imgs/result6.bmp)
