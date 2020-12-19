@@ -3,7 +3,7 @@
 
 #### Abstract
 
-This is a implementation of bilinear interpolation for image resize operation, coding for TMS320C6000 series DPS from Texas Instruments.
+This is a implementation of bilinear interpolation for image resize operation, coding for TMS320C6000 series DSPs from Texas Instruments.
 
 We implement bilinear algorithm using linear assembly language.
 
